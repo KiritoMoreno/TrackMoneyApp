@@ -1,10 +1,12 @@
 package com.example.trackmoney
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,8 +44,15 @@ class MainActivity : AppCompatActivity() {
 
         updateDashboard()
 
+        val addBtn: FloatingActionButton = findViewById(R.id.addBtn)
+        addBtn.setOnClickListener {
+            //Inten is a description of an action that want the system to perform
+            //It will need two parameters ( Start activity and End activity)
+            val intent = Intent(this, AddTransaction::class.java)
+            startActivity(intent)
+        }
     }
-    //
+    // 
     private fun updateDashboard(){
         val totalAmount= transaction.map{it.amount}.sum() //New list with only the amounts of transaction
         val budgetAmount= transaction.filter { it.amount>0 }.map { it.amount }.sum()  //This is the list of all the amounts of the transactions than are greater than zero

@@ -3,6 +3,7 @@ package com.example.trackmoney
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -46,6 +47,10 @@ class AddTransaction : AppCompatActivity() {
 
             if (amount == null)
                 amountLayout.error = "Please enter a valid amount"
+        }
+        val closeBtn: ImageButton = findViewById(R.id.closeBtn)
+        closeBtn.setOnClickListener {
+            finish()
         }
     }
 }
