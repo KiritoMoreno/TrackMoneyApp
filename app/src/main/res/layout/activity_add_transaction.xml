@@ -84,6 +84,19 @@
             </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/addTransactionBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add transaction"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/green"
+            android:padding="12dp"
+            android:textColor="@android:color/white"
+            >
+
+        </Button>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
