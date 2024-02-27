@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TrackMoney</string>
+    <string name="amount_format">$ %.2f</string>
+
 </resources>
