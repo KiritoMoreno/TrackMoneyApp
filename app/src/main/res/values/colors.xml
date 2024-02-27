@@ -6,4 +6,10 @@
     <color name="green">#2DAA32</color>
     <color name="red">#D60000</color>
     <color name="btn_ic_add">#306BD1</color>
+
+    <color name="colorPrimary">#306BD1</color>
+    <color name="colorPrimaryDark">#0A1260</color>
+    <color name="colorAccent">#708BBA</color>
+    <color name="textMain">#6B6E73</color>
+
 </resources>
