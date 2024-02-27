@@ -13,10 +13,12 @@
         android:theme="@style/Theme.TrackMoney"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".AddTransaction"
+            android:label="Add Transaction"
             android:exported="false" />
         <activity
-            android:name=".AddTransaction"
+            android:name=".MainActivity"
+            android:label="Main Activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

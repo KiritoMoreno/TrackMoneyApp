@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    // 
+    //
     private fun updateDashboard(){
         val totalAmount= transaction.map{it.amount}.sum() //New list with only the amounts of transaction
         val budgetAmount= transaction.filter { it.amount>0 }.map { it.amount }.sum()  //This is the list of all the amounts of the transactions than are greater than zero
