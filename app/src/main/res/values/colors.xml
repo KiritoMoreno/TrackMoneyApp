@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="green">#2DAA32</color>
+    <color name="red">#D60000</color>
+    <color name="btn_ic_add">#306BD1</color>
 </resources>
