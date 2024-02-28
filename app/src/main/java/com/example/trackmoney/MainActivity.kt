@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     //Transactions to our Database
     private fun fetchAll(){
         GlobalScope.launch{
+
             transactions = db.transactionDao().getAll()
 
             runOnUiThread{
