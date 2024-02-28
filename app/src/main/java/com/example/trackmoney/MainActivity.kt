@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -16,7 +17,9 @@ class MainActivity : AppCompatActivity() {
     //The rexycler view need a few things: 1. Adapter to know how it should look, behave and what kind of data it displays
     //2. The layout manager to tell it how it should position items and when to recycle one of them that are off of the screen
 
+    private lateinit var deletedTransaction: Transaction
     private lateinit var transactions : List<Transaction>
+    private lateinit var oldTransactions: List<Transaction>
     private lateinit var transactionAdapter : TransactionAdapter
     private lateinit var linearLayoutManager : LinearLayoutManager
 
@@ -45,6 +48,23 @@ class MainActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = transactionAdapter
+
+        //Swipe to remove
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT){
+            override fun onMove(
+                recyclerView:RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean{
+                return false
+            }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                deleteTransaction(transactions[viewHolder.adapterPosition])
+            }
+        }
+
+        val swipeHelper = ItemTouchHelper(itemTouchHelper)
+        swipeHelper.attachToRecyclerView(recyclerView)
 
         val addBtn: FloatingActionButton = findViewById(R.id.addBtn)
         addBtn.setOnClickListener {
@@ -84,6 +104,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun deleteTransaction(transaction: Transaction){
+        deletedTransaction= transaction
+        oldTransactions = transactions
+
+        GlobalScope.launch {
+            db.transactionDao().delete(transaction)
+
+            transactions = transactions.filter { it.id != transaction.id }
+            runOnUiThread {
+                updateDashboard()
+            }
+        }
+    }
     override fun onResume() {
         super.onResume()
         fetchAll()
