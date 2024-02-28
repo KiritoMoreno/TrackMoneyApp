@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class TransactionAdapter(private var transaction:List<Transaction>): RecyclerView.Adapter<TransactionAdapter.TransactionHolder>() {
+class TransactionAdapter(private var transactions:List<Transaction>): RecyclerView.Adapter<TransactionAdapter.TransactionHolder>() {
     class TransactionHolder(view: View): RecyclerView.ViewHolder(view){
         val label : TextView = view.findViewById(R.id.label)
         val amount : TextView = view.findViewById(R.id.amount)
@@ -23,7 +23,7 @@ class TransactionAdapter(private var transaction:List<Transaction>): RecyclerVie
 
     override fun onBindViewHolder(holder: TransactionHolder, position: Int) {
         // combined viewholder is called to associate viewholder with data instance and fill each field.
-        val transaction: Transaction = transaction[position]
+        val transaction: Transaction = transactions[position]
         val context: Context = holder.amount.context
 
         if(transaction.amount >= 0){
@@ -37,7 +37,11 @@ class TransactionAdapter(private var transaction:List<Transaction>): RecyclerVie
     }
 
     override fun getItemCount(): Int {
-        return transaction.size
+        return transactions.size
+    }
+    fun setData(transactions: List<Transaction>){
+        this.transactions = transactions
+        notifyDataSetChanged()
     }
 
 

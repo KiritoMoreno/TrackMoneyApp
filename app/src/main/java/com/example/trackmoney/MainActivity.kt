@@ -6,27 +6,39 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     //The rexycler view need a few things: 1. Adapter to know how it should look, behave and what kind of data it displays
     //2. The layout manager to tell it how it should position items and when to recycle one of them that are off of the screen
 
-    private lateinit var transaction : List<Transaction>
+    private lateinit var transactions : List<Transaction>
     private lateinit var transactionAdapter : TransactionAdapter
     private lateinit var linearLayoutManager : LinearLayoutManager
+
+    //Database class
+    private lateinit var db:AppDatabase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        transaction = arrayListOf()  // We creating an empty list
+        transactions = arrayListOf()  // We creating an empty list
 
         // transactionAdapter needs parameters
-        transactionAdapter = TransactionAdapter(transaction)
+        transactionAdapter = TransactionAdapter(transactions)
         // LayoutManager needs to know the context ( this class MainActivity.kl)
         linearLayoutManager= LinearLayoutManager(this)
+
+        // Now our data base is ready to use -->
+        db = Room.databaseBuilder(this,
+            AppDatabase::class.java,
+            "transactions").build()
 
         // Set the layout manager and adapter for the recyclerview
         val recyclerView: RecyclerView = findViewById(R.id.recyclerview)
@@ -34,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = transactionAdapter
 
-        updateDashboard()
+        fetchAll()
 
         val addBtn: FloatingActionButton = findViewById(R.id.addBtn)
         addBtn.setOnClickListener {
@@ -44,10 +56,23 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    //
+    //Transactions to our Database
+    private fun fetchAll(){
+        GlobalScope.launch{
+            transactions = db.transactionDao().getAll()
+
+            runOnUiThread{
+                updateDashboard()
+                transactionAdapter.setData(transactions)
+
+            }
+        }
+    }
+
+
     private fun updateDashboard(){
-        val totalAmount= transaction.map{it.amount}.sum() //New list with only the amounts of transaction
-        val budgetAmount= transaction.filter { it.amount>0 }.map { it.amount }.sum()  //This is the list of all the amounts of the transactions than are greater than zero
+        val totalAmount= transactions.map{it.amount}.sum() //New list with only the amounts of transaction
+        val budgetAmount= transactions.filter { it.amount>0 }.map { it.amount }.sum()  //This is the list of all the amounts of the transactions than are greater than zero
         val expenseAmount= totalAmount - budgetAmount
 
         val balance: TextView = findViewById(R.id.balance)
