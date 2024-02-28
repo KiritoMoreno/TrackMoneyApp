@@ -3,12 +3,15 @@ package com.example.trackmoney
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -104,6 +107,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Calling the database to insert the deleted action and then update the main ui
+    private fun undoDelete(){
+        GlobalScope.launch {
+            db.transactionDao().insertAll(deletedTransaction)
+
+            transactions = oldTransactions
+            runOnUiThread {
+                updateDashboard()
+            }
+        }
+    }
+    private fun showSnackbar(){
+        val view = findViewById<View>(R.id.coordinator)
+        val snackbar = Snackbar.make(view,"Trasaction deleted!", Snackbar.LENGTH_LONG)
+        snackbar.setAction("undo"){
+            undoDelete()
+        }
+            .setActionTextColor(ContextCompat.getColor(this,R.color.red))
+            .setTextColor(ContextCompat.getColor(this,R.color.white))
+            .show()
+
+    }
     private fun deleteTransaction(transaction: Transaction){
         deletedTransaction= transaction
         oldTransactions = transactions
@@ -114,6 +139,7 @@ class MainActivity : AppCompatActivity() {
             transactions = transactions.filter { it.id != transaction.id }
             runOnUiThread {
                 updateDashboard()
+                showSnackbar()
             }
         }
     }
