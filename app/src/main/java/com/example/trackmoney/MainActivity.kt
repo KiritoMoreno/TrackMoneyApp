@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = transactionAdapter
 
-        fetchAll()
-
         val addBtn: FloatingActionButton = findViewById(R.id.addBtn)
         addBtn.setOnClickListener {
             //Inten is a description of an action that want the system to perform
@@ -84,6 +82,11 @@ class MainActivity : AppCompatActivity() {
         budget.text= "$ %.2f".format(budgetAmount)
         expense.text="$ %.2f".format(expenseAmount)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchAll()
     }
 
 }
