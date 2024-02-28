@@ -51,9 +51,9 @@ dependencies {
     implementation ("com.google.android.material:material:1.5.0")
 
 
-    implementation("androidx.room:room-runtime:2.2.6")
-    kapt("androidx.room:room-compiler:2.2.6")
+    implementation("androidx.room:room-runtime:2.4.0")
+    kapt("androidx.room:room-compiler:2.4.0")
 
     //optional -Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-ktx:2.4.0")
 }

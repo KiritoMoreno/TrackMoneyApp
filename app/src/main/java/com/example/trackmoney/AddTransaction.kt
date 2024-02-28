@@ -2,6 +2,7 @@ package com.example.trackmoney
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.core.widget.addTextChangedListener
@@ -10,10 +11,20 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
 
 class AddTransaction : AppCompatActivity() {
     //When the add transaction button is clicked it will check if the fields are empty or not ( show error message or add new transaction)
 
+    // Se crea la base de datos una vez y se reutiliza en toda la aplicación
+    private val db: AppDatabase by lazy {
+        Room.databaseBuilder(
+            this,
+            AppDatabase::class.java,
+            "transactions"
+        ).build()
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_transaction)
@@ -62,13 +73,20 @@ class AddTransaction : AppCompatActivity() {
             finish()
         }
     }
-    private fun insert(transaction: Transaction){
-        val db: AppDatabase = Room.inMemoryDatabaseBuilder(this,
-            AppDatabase::class.java).build()
-
-        GlobalScope.launch {
-            db.transactionDao().insertAll(transaction)
-            finish()
+    private fun insert(transaction: Transaction) {
+        lifecycleScope.launch{
+            try {
+                GlobalScope.launch {
+                    db.transactionDao().insertAll(transaction)
+                    finish()
+                }
+            } catch (e: Exception) {
+                // Manejar el error, por ejemplo, imprimirlo o mostrar un mensaje al usuario
+                e.printStackTrace()
+            } finally {
+                // Cerrar la base de datos al finalizar la operación
+                db.close()
+            }
         }
     }
 }
