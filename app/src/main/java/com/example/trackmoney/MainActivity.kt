@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     //The rexycler view need a few things: 1. Adapter to know how it should look, behave and what kind of data it displays
     //2. The layout manager to tell it how it should position items and when to recycle one of them that are off of the screen
 
-    private lateinit var transaction : ArrayList<Transaction>
+    private lateinit var transaction : List<Transaction>
     private lateinit var transactionAdapter : TransactionAdapter
     private lateinit var linearLayoutManager : LinearLayoutManager
 
@@ -21,15 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        transaction = arrayListOf(
-            Transaction("Weekend Budget", 400.00),
-            Transaction("Bananas", -4.00),
-            Transaction("Gasoline", -40.00),
-            Transaction("Breakfast", -9.90),
-            Transaction("Water Bottles", -4.00),
-            Transaction("Design", -80.00),
-            Transaction("Car Park", -15.00)
-        )
+        transaction = arrayListOf()  // We creating an empty list
 
         // transactionAdapter needs parameters
         transactionAdapter = TransactionAdapter(transaction)
