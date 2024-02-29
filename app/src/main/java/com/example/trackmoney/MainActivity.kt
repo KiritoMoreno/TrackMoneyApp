@@ -114,6 +114,8 @@ class MainActivity : AppCompatActivity() {
 
             transactions = oldTransactions
             runOnUiThread {
+                transactionAdapter.setData(transactions)
+                showSnackbar()
                 updateDashboard()
             }
         }
@@ -139,6 +141,7 @@ class MainActivity : AppCompatActivity() {
             transactions = transactions.filter { it.id != transaction.id }
             runOnUiThread {
                 updateDashboard()
+                transactionAdapter.setData(transactions)
                 showSnackbar()
             }
         }

@@ -11,7 +11,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import androidx.lifecycle.lifecycleScope
+
 
 class AddTransaction : AppCompatActivity() {
     //When the add transaction button is clicked it will check if the fields are empty or not ( show error message or add new transaction)
@@ -74,12 +74,10 @@ class AddTransaction : AppCompatActivity() {
         }
     }
     private fun insert(transaction: Transaction) {
-        lifecycleScope.launch{
+        GlobalScope.launch{
             try {
-                GlobalScope.launch {
-                    db.transactionDao().insertAll(transaction)
-                    finish()
-                }
+                db.transactionDao().insertAll(transaction)
+                finish()
             } catch (e: Exception) {
                 // Manejar el error, por ejemplo, imprimirlo o mostrar un mensaje al usuario
                 e.printStackTrace()
